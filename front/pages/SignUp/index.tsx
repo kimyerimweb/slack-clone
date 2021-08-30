@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import useInput from '@hooks/useInput';
 import { Button, Error, Form, Header, Input, Label, LinkContainer, Success } from '@pages/SignUp/styles';
@@ -62,25 +63,25 @@ const SignUp = () => {
         <Label id="email-label">
           <span>이메일 주소</span>
           <div>
-            <Input type="email" value={email} onChange={onChangeEmail} />
+            <Input type="email" value={email} onChange={onChangeEmail} required />
           </div>
         </Label>
         <Label id="nickname-label">
           <span>닉네임</span>
           <div>
-            <Input type="text" value={nickname} onChange={onChangeNickname} />
+            <Input type="text" value={nickname} onChange={onChangeNickname} required />
           </div>
         </Label>
         <Label id="password-label">
           <span>비밀번호</span>
           <div>
-            <Input type="password" value={password} onChange={onChangePassword} />
+            <Input type="password" value={password} onChange={onChangePassword} required />
           </div>
         </Label>
         <Label id="password-check-label">
           <span>비밀번호 확인</span>
           <div>
-            <Input type="password" value={passwordCheck} onChange={onChangePasswordCheck} />
+            <Input type="password" value={passwordCheck} onChange={onChangePasswordCheck} required />
           </div>
           {mismatchError && <Error>비밀번호가 일치하지 않습니다!</Error>}
           {!email && <Error>이메일 주소를 입력해주세요!</Error>}
@@ -91,7 +92,7 @@ const SignUp = () => {
       </Form>
       <LinkContainer>
         이미 회원이신가요?&nbsp;
-        <a href="/login">로그인 하러가기</a>
+        <Link to="/login">로그인 하러가기</Link>
       </LinkContainer>
     </div>
   );
