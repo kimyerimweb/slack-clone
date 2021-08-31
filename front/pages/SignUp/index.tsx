@@ -1,10 +1,13 @@
 import React, { useCallback, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import useInput from '@hooks/useInput';
 import { Button, Error, Form, Header, Input, Label, LinkContainer, Success } from '@pages/SignUp/styles';
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
 
 const SignUp = () => {
+  const { data, error, revalidate } = useSWR('http://localhost:3095/api/users', fetcher);
   const [email, onChangeEmail, setEmail] = useInput('');
   const [nickname, onChangeNickname, setNickname] = useInput('');
   const [password, setPassword] = useState('');
@@ -36,7 +39,7 @@ const SignUp = () => {
       if (!mismatchError && email) {
         console.log('서버로 회원가입하기 ');
         setSignUpError('');
-        setSignUpSuccess(true);
+        setSignUpSuccess(false);
         axios
           .post('http://localhost:3095/api/users', {
             //프록시 설정을 해주면 api생략 가능. 지금은 3090이 3095에게 보내는 것
@@ -55,6 +58,14 @@ const SignUp = () => {
     },
     [email, nickname, password, passwordCheck],
   );
+
+  if (data === undefined) {
+    return <div>로딩중...</div>;
+  }
+
+  if (data) {
+    return <Redirect to="/workspace/channel" />;
+  }
 
   return (
     <div id="container">
