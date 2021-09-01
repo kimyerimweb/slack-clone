@@ -1,8 +1,13 @@
-import Workspace from '@layouts/Workspace';
 import React from 'react';
+import { Container, DragOver, Header } from './styles';
 
 const Channel = () => {
-  return <div>채널</div>;
+  return (
+    <Container>
+      <Header>채널</Header>
+      <DragOver>드래그오버</DragOver>
+    </Container>
+  );
 };
 
 export default Channel;
