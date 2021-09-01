@@ -1,8 +1,12 @@
-import Workspace from '@layouts/Workspace';
+import { Container, Header } from './styles';
 import React from 'react';
 
 const DirectMessage = () => {
-  return <div>dm</div>;
+  return (
+    <Container>
+      <Header>DM</Header>
+    </Container>
+  );
 };
 
 export default DirectMessage;
