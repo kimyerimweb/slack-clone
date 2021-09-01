@@ -12,6 +12,9 @@ const SignUp = () => {
   const [nickname, onChangeNickname, setNickname] = useInput('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
+  const [mismatchError, setMismatchError] = useState(false);
+  const [signUpError, setSignUpError] = useState('');
+  const [signUpSuccess, setSignUpSuccess] = useState(false);
 
   const onChangePassword = useCallback(
     (e) => {
@@ -29,15 +32,10 @@ const SignUp = () => {
     [password],
   );
 
-  const [mismatchError, setMismatchError] = useState(false);
-  const [signUpError, setSignUpError] = useState('');
-  const [signUpSuccess, setSignUpSuccess] = useState(false);
-
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
       if (!mismatchError && email) {
-        console.log('서버로 회원가입하기 ');
         setSignUpError('');
         setSignUpSuccess(false);
         axios
