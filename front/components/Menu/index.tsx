@@ -18,7 +18,6 @@ const Menu: FC<Props> = ({ children, style, show, onCloseModal, closeButton }) =
   return (
     <CreateMenu onClick={onCloseModal}>
       <div style={style} onClick={stopPropagation}>
-        menu
         {closeButton && <CloseModalButton onClick={onCloseModal}>&times;</CloseModalButton>}
         {children}
       </div>
