@@ -31,6 +31,7 @@ import useInput from '@hooks/useInput';
 import { toast } from 'react-toastify';
 import InviteWorkspaceModal from '@components/InviteWorkspaceModal';
 import InviteChannelModal from '@components/InviteChannelModal';
+import DMList from '@components/DMList';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
@@ -179,9 +180,7 @@ const Workspace: FC = () => {
                 <button onClick={onLogout}>로그아웃</button>
               </WorkspaceModal>
             </Menu>
-            {channelDAta?.map((el) => (
-              <div>{el.name}</div>
-            ))}
+            <DMList />
           </MenuScroll>
         </Channels>
         <Chats>
