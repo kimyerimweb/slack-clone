@@ -2,7 +2,7 @@ import React, { FC, useCallback, useState } from 'react';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import useSWR from 'swr';
-import { Redirect, Route, Switch, useParams } from 'react-router';
+import { Redirect, Route, Switch, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {
   Header,
