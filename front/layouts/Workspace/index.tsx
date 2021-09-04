@@ -1,4 +1,4 @@
-import React, { VFC, useCallback, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import useSWR from 'swr';
@@ -29,15 +29,19 @@ import { IUser, IChannel } from '@typings/db';
 import { Button, Input, Label } from '@pages/SignUp/styles';
 import useInput from '@hooks/useInput';
 import { toast } from 'react-toastify';
+import InviteWorkspaceModal from '@components/InviteWorkspaceModal';
+import InviteChannelModal from '@components/InviteChannelModal';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
-const Workspace: VFC = () => {
+const Workspace: FC = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false);
   const [showWorkspaceModal, setShowWorkSpaceModal] = useState(false);
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
+  const [showInviteWorkspaceModal, setShowInviteWorkspaceModal] = useState(false);
+  const [showInviteChannelModal, setShowInviteChannelModal] = useState(false);
   const [newWorkspace, onChangeNewWorkspace, setNewWorkspace] = useInput('');
   const [newUrl, onChangeNewUrl, setNewUrl] = useInput('');
   const { workspace } = useParams<{ workspace: string }>();
@@ -72,6 +76,8 @@ const Workspace: VFC = () => {
   const onCloseModal = useCallback(() => {
     setShowCreateWorkspaceModal(false);
     setShowCreateChannelModal(false);
+    setShowInviteWorkspaceModal(false);
+    setShowInviteChannelModal(false);
   }, []);
 
   const onCreateWorkspace = useCallback(
@@ -113,6 +119,16 @@ const Workspace: VFC = () => {
   const toggleWorkspaceModal = useCallback((e) => {
     e.stopPropagation();
     setShowWorkSpaceModal((prev) => !prev);
+  }, []);
+
+  const onClickInviteWorkspace = useCallback((e) => {
+    e.stopPropagation();
+    setShowInviteWorkspaceModal((prev) => !prev);
+  }, []);
+
+  const onClickInviteChannel = useCallback((e) => {
+    e.stopPropagation();
+    setShowInviteChannelModal((prev) => !prev);
   }, []);
 
   if (!userData) {
@@ -158,7 +174,7 @@ const Workspace: VFC = () => {
             <Menu style={{ top: 95, left: 80 }} show={showWorkspaceModal} onCloseModal={toggleWorkspaceModal}>
               <WorkspaceModal>
                 <h2>Sleact</h2>
-                {}
+                <button onClick={onClickInviteWorkspace}>워크스페이스에 초대</button>
                 <button onClick={onClickAddChannel}>채널 만들기</button>
                 <button onClick={onLogout}>로그아웃</button>
               </WorkspaceModal>
@@ -193,6 +209,16 @@ const Workspace: VFC = () => {
         onCloseModal={onCloseModal}
         setShowCreateChannelModal={setShowCreateChannelModal}
       ></CreateChannelModal>
+      <InviteWorkspaceModal
+        show={showInviteWorkspaceModal}
+        onCloseModal={onCloseModal}
+        setShowInviteWorkspaceModal={setShowInviteWorkspaceModal}
+      ></InviteWorkspaceModal>
+      <InviteChannelModal
+        show={showInviteChannelModal}
+        onCloseModal={onCloseModal}
+        setShowInviteChannelModal={setShowInviteChannelModal}
+      ></InviteChannelModal>
     </div>
   );
 };
