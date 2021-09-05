@@ -8,7 +8,6 @@ interface Props {
 }
 
 const Chat: VFC<Props> = ({ data }) => {
-  console.log('안녕');
   const user = data.Sender;
   return (
     <ChatWrapper>
