@@ -62,6 +62,11 @@ const Workspace: FC = () => {
     fetcher,
   );
 
+  const { data: memberData } = useSWR<IUser[]>(
+    userData ? `http://localhost:3095/api/workspaces/${workspace}/members` : null,
+    fetcher,
+  );
+
   useEffect(() => {
     if (userData && channelData && socket) {
       socket.emit('login', { id: userData.id, channels: channelData.map((v) => v.id) });
