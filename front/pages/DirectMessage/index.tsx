@@ -35,6 +35,12 @@ const DirectMessage = () => {
   const isEmpty = chatData?.[0]?.length === 0;
   const isReachingEnd = isEmpty || (chatData && chatData[chatData?.length - 1]?.length < 20) || false;
   
+  useEffect(()=>{
+    if(chatData?.length === 1){
+      scrollbarRef.current?.scrollToBottom()
+    }
+  },[chatData])
+
   const onSubmitForm = useCallback(
     (e) => {
       e.preventDefault();
@@ -48,6 +54,7 @@ const DirectMessage = () => {
           .then(() => {
             revalidateChat();
             setChat('');
+            scrollbarRef.current?.scrollToBottom()
           })
           .catch((error) => console.dir(error));
     },
