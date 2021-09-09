@@ -11,6 +11,7 @@ import useInput from '@hooks/useInput';
 import axios from 'axios';
 import makeSection from '@utils/makeSection';
 import Scrollbars from 'react-custom-scrollbars';
+import useSocket from '@hooks/useSocket';
 
 const DirectMessage = () => {
   const [chat, onChangeChat, setChat] = useInput('');
@@ -21,6 +22,7 @@ const DirectMessage = () => {
 
   const placeholder = `${userData?.nickname}에게 메시지 보내기`;
   const scrollbarRef = useRef<Scrollbars>(null);
+  const [socket] = useSocket(workspace)
 
   const {
     data: chatData,
@@ -35,6 +37,28 @@ const DirectMessage = () => {
   const isEmpty = chatData?.[0]?.length === 0;
   const isReachingEnd = isEmpty || (chatData && chatData[chatData?.length - 1]?.length < 20) || false;
   
+  const onMessage = useCallback((data)=>{
+    if(data.SenderId===Number(id)&& myData?.id !== Number(id)){
+      mutateChat(chatData => {
+        chatData?.[0].unshift(data)
+        return chatData
+      },false).then(()=>{
+        if(scrollbarRef.current){
+          if(scrollbarRef.current.getScrollHeight()<scrollbarRef.current.getScrollTop()+150){
+            scrollbarRef.current.scrollToBottom()
+          }
+        }
+      })
+    }
+  },[])
+
+  useEffect(()=>{
+    socket?.on('dm',onMessage)
+    return ()=>{
+      socket?.off('dm',onMessage)
+    }
+  },[socket,onMessage])
+
   useEffect(()=>{
     if(chatData?.length === 1){
       scrollbarRef.current?.scrollToBottom()
