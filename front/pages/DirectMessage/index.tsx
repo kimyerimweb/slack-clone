@@ -44,21 +44,36 @@ const DirectMessage = () => {
   const onSubmitForm = useCallback(
     (e) => {
       e.preventDefault();
-      if (chat?.trim())
-        axios
-          .post(
-            `http://localhost:3095/api/workspaces/${workspace}/dms/${id}/chats`,
-            { content: chat },
-            { withCredentials: true },
-          )
-          .then(() => {
-            revalidateChat();
+      if (chat?.trim()&&chatData&&myData&&userData){
+        const savedChat = chat
+        mutateChat(prevChatData => {
+          prevChatData?.[0].unshift({
+            id: (chatData[0][0]?.id||0)+1,
+            content: savedChat,
+            SenderId: myData.id,
+            Sender:myData,
+            ReceiverId:userData.id,
+            Receiver:userData,
+            createdAt:new Date(),
+          })
+          return prevChatData
+        },false).then(()=>{
             setChat('');
             scrollbarRef.current?.scrollToBottom()
-          })
-          .catch((error) => console.dir(error));
+        })
+          axios
+            .post(
+              `http://localhost:3095/api/workspaces/${workspace}/dms/${id}/chats`,
+              { content: chat },
+              { withCredentials: true },
+            )
+            .then(() => {
+              revalidateChat();
+            })
+            .catch((error) => console.dir(error));
+      }
     },
-    [chat],
+    [chat,chatData,myData,userData,workspace,id],
   );
 
   if (!userData || !myData) {
