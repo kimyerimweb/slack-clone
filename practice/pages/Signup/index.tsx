@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -16,7 +16,7 @@ const Signup = () => {
   const [nickname, setNickname, onChangeNickname] = useInput('');
 
   const [password, setPassword] = useState('');
-  const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangePassword = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
 
     if (e.target.value === passwordCheck) {
@@ -24,51 +24,57 @@ const Signup = () => {
     } else {
       setPasswordValidation(false);
     }
-  };
+  }, []);
 
   const [passwordCheck, setPasswordCheck] = useState('');
-  const onChangePasswordCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPasswordCheck(e.target.value);
+  const onChangePasswordCheck = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setPasswordCheck(e.target.value);
 
-    if (e.target.value === password) {
-      setPasswordValidation(true);
-    } else {
-      setPasswordValidation(false);
-    }
-  };
+      if (e.target.value === password) {
+        setPasswordValidation(true);
+      } else {
+        setPasswordValidation(false);
+      }
+    },
+    [password],
+  );
 
-  const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmitForm = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
 
-    if (email.trim() && nickname.trim() && password.trim() && passwordCheck.trim()) {
-      axios
-        .post('http://localhost:3095/api/users', {
-          email,
-          nickname,
-          password,
-        })
-        .then(() => {
-          setRegistration(true);
-          setEmail('');
-          setNickname('');
-          setPassword('');
-          setPasswordCheck('');
-        })
-        .catch((error) => {
-          toast.error(error.response.data, {
-            position: 'bottom-center',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
+      if (email.trim() && nickname.trim() && password.trim() && passwordCheck.trim()) {
+        axios
+          .post('http://localhost:3095/api/users', {
+            email,
+            nickname,
+            password,
+          })
+          .then(() => {
+            setRegistration(true);
+            setEmail('');
+            setNickname('');
+            setPassword('');
+            setPasswordCheck('');
+          })
+          .catch((error) => {
+            toast.error(error.response.data, {
+              position: 'bottom-center',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+
+            setErrorMessage(error.response.data);
           });
-
-          setErrorMessage(error.response.data);
-        });
-    }
-  };
+      }
+    },
+    [email, nickname, password, passwordCheck],
+  );
 
   return (
     <>
