@@ -17,11 +17,7 @@ export default function Signup() {
   const [isSignUpSuccess, setIsSignUpSuccess] = useState<boolean>(false);
   const [isSignUpError, setIsSignUpError] = useState<string>("");
 
-  const { data, error } = useSWR("http://localhost:3095/api/users", fetcher, {
-    revalidateIfStale: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-  });
+  const { data, error } = useSWR("http://localhost:3095/api/users", fetcher);
 
   const {
     register,

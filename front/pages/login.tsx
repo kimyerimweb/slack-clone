@@ -13,11 +13,7 @@ type Formvalues = {
 
 export default function Login() {
   const [isLoginError, setIsLoginError] = useState("");
-  const { data, error } = useSWR("http://localhost:3095/api/users", fetcher, {
-    revalidateIfStale: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-  });
+  const { data: userData } = useSWR("http://localhost:3095/api/users", fetcher);
 
   const {
     register,
@@ -41,16 +37,19 @@ export default function Login() {
         },
         { withCredentials: true }
       )
+      .then(() => {
+        Router.replace("/");
+      })
       .catch((error) => {
         setIsLoginError(error.response.data);
       });
   }, []);
 
   useEffect(() => {
-    if (data) {
+    if (userData) {
       Router.replace("/");
     }
-  }, [data]);
+  }, [userData]);
 
   return (
     <>
