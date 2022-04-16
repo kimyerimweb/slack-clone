@@ -1,7 +1,10 @@
 import { useForm } from "react-hook-form";
+import Router from "next/router";
 import Link from "next/link";
 import { useCallback, useRef, useEffect, useState } from "react";
 import axios from "axios";
+import useSWR from "swr";
+import fetcher from "../utils/fetcher";
 
 type Formvalues = {
   email: string;
@@ -13,6 +16,12 @@ type Formvalues = {
 export default function Signup() {
   const [isSignUpSuccess, setIsSignUpSuccess] = useState<boolean>(false);
   const [isSignUpError, setIsSignUpError] = useState<string>("");
+
+  const { data, error } = useSWR("http://localhost:3095/api/users", fetcher, {
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
 
   const {
     register,
@@ -43,6 +52,12 @@ export default function Signup() {
     }
   }, [isSignUpSuccess, reset]); //회원가입 정보를 보냈고 성공했을 때 변경되는 값을 이용하기
 
+  useEffect(() => {
+    if (data) {
+      Router.replace("/");
+    }
+  }, [data]);
+
   const handleSubmitForm = useCallback((data) => {
     const { email, nickname, password } = data;
 
@@ -50,11 +65,15 @@ export default function Signup() {
     setIsSignUpError("");
 
     axios
-      .post("http://localhost:3095/api/users", {
-        email,
-        nickname,
-        password,
-      })
+      .post(
+        "http://localhost:3095/api/users",
+        {
+          email,
+          nickname,
+          password,
+        },
+        { withCredentials: true }
+      )
       .then(() => {
         setIsSignUpSuccess(true);
       })
