@@ -6,21 +6,17 @@ import { useEffect } from "react";
 import Router from "next/router";
 
 function Home() {
-  const { data, error } = useSWR("http://localhost:3095/api/users", fetcher);
-
+  const { data } = useSWR("http://localhost:3095/api/users", fetcher);
   useEffect(() => {
-    if (!data) {
-      Router.replace("/login");
-    }
+    data ? Router.replace("/workspace/channel") : Router.replace("/login");
   }, [data]);
 
   return (
     <>
       <Head>
-        <title>Create Next App</title>
+        <title>Sleact</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1>안녕?</h1>
     </>
   );
 }
