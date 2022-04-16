@@ -15,6 +15,12 @@ export default function Login() {
   const [isLoginError, setIsLoginError] = useState("");
   const { data: userData } = useSWR("http://localhost:3095/api/users", fetcher);
 
+  useEffect(() => {
+    if (userData) {
+      Router.replace("/");
+    }
+  }, [userData]);
+
   const {
     register,
     handleSubmit,
@@ -38,18 +44,12 @@ export default function Login() {
         { withCredentials: true }
       )
       .then(() => {
-        Router.replace("/");
+        Router.replace("/workspace/channel");
       })
       .catch((error) => {
         setIsLoginError(error.response.data);
       });
   }, []);
-
-  useEffect(() => {
-    if (userData) {
-      Router.replace("/");
-    }
-  }, [userData]);
 
   return (
     <>

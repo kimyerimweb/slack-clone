@@ -17,7 +17,13 @@ export default function Signup() {
   const [isSignUpSuccess, setIsSignUpSuccess] = useState<boolean>(false);
   const [isSignUpError, setIsSignUpError] = useState<string>("");
 
-  const { data, error } = useSWR("http://localhost:3095/api/users", fetcher);
+  const { data } = useSWR("http://localhost:3095/api/users", fetcher);
+
+  useEffect(() => {
+    if (data) {
+      Router.replace("/");
+    }
+  }, [data]);
 
   const {
     register,
@@ -47,12 +53,6 @@ export default function Signup() {
       });
     }
   }, [isSignUpSuccess, reset]); //회원가입 정보를 보냈고 성공했을 때 변경되는 값을 이용하기
-
-  useEffect(() => {
-    if (data) {
-      Router.replace("/");
-    }
-  }, [data]);
 
   const handleSubmitForm = useCallback((data) => {
     const { email, nickname, password } = data;
