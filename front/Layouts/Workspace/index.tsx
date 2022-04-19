@@ -7,9 +7,12 @@ import useSWR, { mutate } from "swr";
 import fetcher from "../../utils/fetcher";
 import gravatar from "gravatar";
 
+import Menu from "../../components/Menu";
+
 export default function Workspace({ children }) {
   const { data } = useSWR("http://localhost:3095/api/users", fetcher);
   const [logoutError, setLogoutError] = useState("");
+  const [showProfile, setShowProfile] = useState(false);
 
   useEffect(() => {
     if (!data) {
@@ -31,26 +34,53 @@ export default function Workspace({ children }) {
       });
   }, []);
 
+  const handleToggleProfile = useCallback(() => {
+    setShowProfile((prev) => !prev);
+  }, []);
+
   return (
     <>
       <header className={styles.header}>
         <div className={styles.rightMenu}>
-          <Image
-            className={styles.img}
-            src={gravatar.url(data?.email, {
-              protocol: "http",
-              s: "28",
-              d: "retro",
-            })}
-            alt={data?.nickname}
-            width={28}
-            height={28}
-          ></Image>
+          <span onClick={handleToggleProfile} className={styles.img}>
+            <Image
+              src={gravatar.url(data?.email, {
+                protocol: "http",
+                s: "28",
+                d: "retro",
+              })}
+              alt={data?.nickname}
+              width={28}
+              height={28}
+            ></Image>
+            {showProfile && (
+              <Menu show={showProfile} handleCloseModal={handleToggleProfile}>
+                <div className={styles.profileModal}>
+                  <div>
+                    <Image
+                      src={gravatar.url(data?.email, {
+                        protocol: "http",
+                        s: "36",
+                        d: "retro",
+                      })}
+                      alt={data?.nickname}
+                      width={36}
+                      height={36}
+                    />
+                    <div>
+                      <span id="profile-name">{data?.nickname}</span>
+                      <span id="profile-active">Active</span>
+                    </div>
+                  </div>
+                  <button onClick={logout} className={styles.logOutButton}>
+                    로그아웃
+                  </button>
+                </div>
+              </Menu>
+            )}
+          </span>
         </div>
       </header>
-      <button onClick={logout} className={styles.logOutButton}>
-        로그아웃
-      </button>
       <div className={styles.workspaceWrapper}>
         <div className={styles.workspaces}></div>
         <nav className={styles.channels}>
