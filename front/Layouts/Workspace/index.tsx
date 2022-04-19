@@ -36,7 +36,7 @@ export default function Workspace({ children }) {
       <header className={styles.header}>
         <div className={styles.rightMenu}>
           <Image
-            className="img"
+            className={styles.img}
             src={gravatar.url(data?.email, {
               protocol: "http",
               s: "28",
