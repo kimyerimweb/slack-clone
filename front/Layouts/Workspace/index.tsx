@@ -14,16 +14,17 @@ import "react-toastify/dist/ReactToastify.css";
 import Menu from "../../components/Menu";
 import NewWorkSpaceCreationModal from "../../components/NewWorkSpaceCreationModal";
 import { IUser } from "../../typings/db";
+import NewChannelCreationModal from "../../components/NewChannelCreationModal";
 
 export default function Workspace({ children }) {
-  const { data } = useSWR<IUser | false>(
-    "http://localhost:3095/api/users",
-    fetcher
-  );
+  const { data } = useSWR<IUser>("http://localhost:3095/api/users", fetcher);
 
   const [logoutError, setLogoutError] = useState<string>("");
   const [showProfile, setShowProfile] = useState<boolean>(false);
   const [showWorkspaceCreationModal, setShowWorkspaceCreationModal] =
+    useState<boolean>(false);
+  const [showWorkspaceModal, setShowWorkspaceModal] = useState<boolean>(false);
+  const [showChannelCreationModal, setShowChannelCreationModal] =
     useState<boolean>(false);
 
   useEffect(() => {
@@ -54,6 +55,16 @@ export default function Workspace({ children }) {
   const handleToggleWorkspaceCreationModal = useCallback((e) => {
     e.stopPropagation();
     setShowWorkspaceCreationModal((prev) => !prev);
+  }, []);
+
+  const handleToggleWorkspaceModal = useCallback((e) => {
+    e.stopPropagation();
+    setShowWorkspaceModal((prev) => !prev);
+  }, []);
+
+  const handleToggleChannelCreationModal = useCallback((e) => {
+    e.stopPropagation();
+    setShowChannelCreationModal((prev) => !prev);
   }, []);
 
   return (
@@ -120,8 +131,30 @@ export default function Workspace({ children }) {
           ;
         </div>
         <nav className={styles.channels}>
-          <button className={styles.workspaceName}>Sleact</button>
-          <div className={styles.menuScroll}>menuScroll</div>
+          <button
+            className={styles.workspaceName}
+            onClick={handleToggleWorkspaceModal}
+          >
+            Sleact
+          </button>
+          <div className={styles.menuScroll}>
+            {showWorkspaceModal && (
+              <Menu
+                handleCloseModal={handleToggleWorkspaceModal}
+                style={{ top: "110px", left: "70px", width: "150px" }}
+              >
+                <div className={styles.workspaceModal}>
+                  <h2>Sleact</h2>
+                  <button onClick={handleToggleChannelCreationModal}>
+                    채널 만들기
+                  </button>
+                  <button onClick={logout} className={styles.logOutButton}>
+                    로그아웃
+                  </button>
+                </div>
+              </Menu>
+            )}
+          </div>
         </nav>
         <div className={styles.chats}>{children}</div>
       </div>
@@ -131,6 +164,13 @@ export default function Workspace({ children }) {
           handleToggleWorkspaceModal={handleToggleWorkspaceCreationModal}
           setShowWorkspaceModal={setShowWorkspaceCreationModal}
           setShowProfile={setShowProfile}
+        />
+      )}
+      {showChannelCreationModal && (
+        <NewChannelCreationModal
+          handleToggleChannelCreationModal={handleToggleChannelCreationModal}
+          setShowChannelCreationModal={setShowChannelCreationModal}
+          setShowWorkspaceModal={setShowWorkspaceModal}
         />
       )}
     </>
