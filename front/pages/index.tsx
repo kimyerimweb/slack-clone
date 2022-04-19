@@ -1,4 +1,3 @@
-import "../styles/home.module.scss";
 import Head from "next/head";
 import fetcher from "../utils/fetcher";
 import useSWR from "swr";
