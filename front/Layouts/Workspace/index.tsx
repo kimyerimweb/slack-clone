@@ -7,11 +7,12 @@ import useSWR, { mutate } from "swr";
 import fetcher from "../../utils/fetcher";
 import gravatar from "gravatar";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Menu from "../../components/Menu";
-import Modal from "../../components/Modal";
-import authStyles from "../../styles/auth.module.scss";
+import NewWorkSpaceCreationModal from "../../components/NewWorkSpaceCreationModal";
 import { IUser } from "../../typings/db";
 
 export default function Workspace({ children }) {
@@ -19,17 +20,6 @@ export default function Workspace({ children }) {
     "http://localhost:3095/api/users",
     fetcher
   );
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      newWorkspace: "",
-      newUrl: "",
-    },
-  });
 
   const [logoutError, setLogoutError] = useState<string>("");
   const [showProfile, setShowProfile] = useState<boolean>(false);
@@ -63,10 +53,6 @@ export default function Workspace({ children }) {
   const handleToggleWorkspaceModal = useCallback((e) => {
     e.stopPropagation();
     setShowWorkspaceModal((prev) => !prev);
-  }, []);
-
-  const handleCreateWorkspace = useCallback((newWorkSpaceData) => {
-    console.log(newWorkSpaceData);
   }, []);
 
   return (
@@ -138,42 +124,13 @@ export default function Workspace({ children }) {
         </nav>
         <div className={styles.chats}>{children}</div>
       </div>
+      <ToastContainer />
       {showWorkspaceModal && (
-        <Modal handleCloseModal={handleToggleWorkspaceModal}>
-          <form onSubmit={handleSubmit(handleCreateWorkspace)}>
-            <label htmlFor="workspace-label" className={authStyles.label}>
-              <span>워크스페이스 이름</span>
-              <input
-                className={authStyles.input}
-                type="text"
-                id="workspace-label"
-                {...register("newWorkspace", {
-                  required: "필수 응답 항목입니다.",
-                })}
-              />
-              <p className={authStyles.error}>
-                {errors.newWorkspace && errors.newWorkspace.message}
-              </p>
-            </label>
-            <label htmlFor="workspace-url-label" className={authStyles.label}>
-              <span>워크스페이스 주소</span>
-              <input
-                className={authStyles.input}
-                type="text"
-                id="workspace-label"
-                {...register("newUrl", {
-                  required: "필수 응답 항목입니다.",
-                })}
-              />
-              <p className={authStyles.error}>
-                {errors.newUrl && errors.newUrl.message}
-              </p>
-            </label>
-            <button type="submit" className={authStyles.button}>
-              생성하기
-            </button>
-          </form>
-        </Modal>
+        <NewWorkSpaceCreationModal
+          handleToggleWorkspaceModal={handleToggleWorkspaceModal}
+          setShowWorkspaceModal={setShowWorkspaceModal}
+          setShowProfile={setShowProfile}
+        />
       )}
     </>
   );
