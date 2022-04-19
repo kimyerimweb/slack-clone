@@ -1,7 +1,7 @@
 import styles from "./workspace.module.scss";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import Image from "next/image";
 import useSWR, { mutate } from "swr";
 import fetcher from "../../utils/fetcher";
@@ -13,11 +13,19 @@ import "react-toastify/dist/ReactToastify.css";
 
 import Menu from "../../components/Menu";
 import NewWorkSpaceCreationModal from "../../components/NewWorkSpaceCreationModal";
-import { IUser } from "../../typings/db";
+import { IUser, IChannel } from "../../typings/db";
 import NewChannelCreationModal from "../../components/NewChannelCreationModal";
+import InviteWorkspaceModal from "../../components/InviteWorkspaceModal";
 
 export default function Workspace({ children }) {
+  const router = useRouter();
+  const { workspace } = router.query;
+
   const { data } = useSWR<IUser>("http://localhost:3095/api/users", fetcher);
+  const { data: channelData } = useSWR<IChannel[]>(
+    `http://localhost:3095/api/workspaces/${workspace}/channels`,
+    fetcher
+  );
 
   const [logoutError, setLogoutError] = useState<string>("");
   const [showProfile, setShowProfile] = useState<boolean>(false);
@@ -25,6 +33,8 @@ export default function Workspace({ children }) {
     useState<boolean>(false);
   const [showWorkspaceModal, setShowWorkspaceModal] = useState<boolean>(false);
   const [showChannelCreationModal, setShowChannelCreationModal] =
+    useState<boolean>(false);
+  const [showInviteWorkspaceModal, setShowInviteWorkspaceModal] =
     useState<boolean>(false);
 
   useEffect(() => {
@@ -65,6 +75,11 @@ export default function Workspace({ children }) {
   const handleToggleChannelCreationModal = useCallback((e) => {
     e.stopPropagation();
     setShowChannelCreationModal((prev) => !prev);
+  }, []);
+
+  const handleToggleInviteWorkspaceModal = useCallback((e) => {
+    e.stopPropagation();
+    setShowInviteWorkspaceModal((prev) => !prev);
   }, []);
 
   return (
@@ -114,7 +129,11 @@ export default function Workspace({ children }) {
         <div className={styles.workspaces}>
           {data?.Workspaces?.map((ws) => {
             return (
-              <Link href={`/workspace/channel`} passHref key={ws.id}>
+              <Link
+                href={`/workspace/${ws.url}/channel/일반`}
+                passHref
+                key={ws.id}
+              >
                 <button type="button" className={styles.workspaceButton}>
                   {ws.name.slice(0, 1).toUpperCase()}
                 </button>
@@ -145,6 +164,9 @@ export default function Workspace({ children }) {
               >
                 <div className={styles.workspaceModal}>
                   <h2>Sleact</h2>
+                  <button onClick={handleToggleInviteWorkspaceModal}>
+                    초대 하기
+                  </button>
                   <button onClick={handleToggleChannelCreationModal}>
                     채널 만들기
                   </button>
@@ -154,6 +176,9 @@ export default function Workspace({ children }) {
                 </div>
               </Menu>
             )}
+            {channelData?.map((ch) => (
+              <div key={ch.id}>{ch.name}</div>
+            ))}
           </div>
         </nav>
         <div className={styles.chats}>{children}</div>
@@ -171,6 +196,12 @@ export default function Workspace({ children }) {
           handleToggleChannelCreationModal={handleToggleChannelCreationModal}
           setShowChannelCreationModal={setShowChannelCreationModal}
           setShowWorkspaceModal={setShowWorkspaceModal}
+        />
+      )}
+      {showInviteWorkspaceModal && (
+        <InviteWorkspaceModal
+          handleToggleInviteWorkspaceModal={handleToggleInviteWorkspaceModal}
+          setShowInviteWorkspaceModal={setShowInviteWorkspaceModal}
         />
       )}
     </>
