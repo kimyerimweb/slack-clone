@@ -39,14 +39,14 @@ export default function NewChannelCreationModal({
 
       axios
         .post(
-          `http://localhost:3095/api//workspaces/${workspace}/channels`,
+          `http://localhost:3095/api/workspaces/${workspace}/channels`,
           {
             name,
           },
           { withCredentials: true }
         )
         .then(() => {
-          mutate("http://localhost:3095/api/users");
+          mutate(`http://localhost:3095/api/workspaces/${workspace}/channels`);
           setShowWorkspaceModal(false);
           setShowChannelCreationModal(false);
           reset({
