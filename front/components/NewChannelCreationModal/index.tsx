@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { mutate } from "swr";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 import Modal from "../../components/Modal";
 import authStyles from "../../styles/auth.module.scss";
@@ -29,13 +30,16 @@ export default function NewChannelCreationModal({
     },
   });
 
+  const router = useRouter();
+  const { workspace } = router.query;
+
   const handleCreateChannel = useCallback(
     (newChannelData) => {
       const { name } = newChannelData;
 
       axios
         .post(
-          "http://localhost:3095/api//workspaces/:workspace/channels",
+          `http://localhost:3095/api//workspaces/${workspace}/channels`,
           {
             name,
           },
@@ -56,7 +60,7 @@ export default function NewChannelCreationModal({
           });
         });
     },
-    [reset, setShowWorkspaceModal, setShowChannelCreationModal]
+    [reset, setShowWorkspaceModal, setShowChannelCreationModal, workspace]
   );
 
   return (
