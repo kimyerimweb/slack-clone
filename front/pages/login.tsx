@@ -45,7 +45,7 @@ export default function Login() {
         { withCredentials: true }
       )
       .then(() => {
-        Router.replace("/workspace/channel");
+        Router.replace("/");
       })
       .catch((error) => {
         setIsLoginError(error.response.data);

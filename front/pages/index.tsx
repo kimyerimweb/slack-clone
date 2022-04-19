@@ -7,7 +7,9 @@ import Router from "next/router";
 function Home() {
   const { data } = useSWR("http://localhost:3095/api/users", fetcher);
   useEffect(() => {
-    data ? Router.replace("/workspace/channel") : Router.replace("/login");
+    data
+      ? Router.replace("/workspace/sleact/channel/일반")
+      : Router.replace("/login");
   }, [data]);
 
   return (

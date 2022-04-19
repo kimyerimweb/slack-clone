@@ -1,5 +1,5 @@
-import Workspace from "../../layouts/Workspace";
-import styles from "../../styles/workspaceChild.module.scss";
+import Workspace from "../../../../layouts/Workspace";
+import styles from "../../../../styles/workspaceChild.module.scss";
 
 export default function DirectMessage() {
   return (
