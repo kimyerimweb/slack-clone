@@ -16,6 +16,7 @@ import NewWorkSpaceCreationModal from "../../components/NewWorkSpaceCreationModa
 import { IUser, IChannel } from "../../typings/db";
 import NewChannelCreationModal from "../../components/NewChannelCreationModal";
 import InviteWorkspaceModal from "../../components/InviteWorkspaceModal";
+import InviteChannelModal from "../../components/InviteChannelModal";
 
 export default function Workspace({ children }) {
   const router = useRouter();
@@ -35,6 +36,8 @@ export default function Workspace({ children }) {
   const [showChannelCreationModal, setShowChannelCreationModal] =
     useState<boolean>(false);
   const [showInviteWorkspaceModal, setShowInviteWorkspaceModal] =
+    useState<boolean>(false);
+  const [showInviteChannelModal, setShowInviteChannelModal] =
     useState<boolean>(false);
 
   useEffect(() => {
@@ -80,6 +83,11 @@ export default function Workspace({ children }) {
   const handleToggleInviteWorkspaceModal = useCallback((e) => {
     e.stopPropagation();
     setShowInviteWorkspaceModal((prev) => !prev);
+  }, []);
+
+  const handleToggleInviteChannelModal = useCallback((e) => {
+    e.stopPropagation();
+    setShowInviteChannelModal((prev) => !prev);
   }, []);
 
   return (
@@ -165,7 +173,10 @@ export default function Workspace({ children }) {
                 <div className={styles.workspaceModal}>
                   <h2>Sleact</h2>
                   <button onClick={handleToggleInviteWorkspaceModal}>
-                    초대 하기
+                    워크 스페이스에 초대 하기
+                  </button>
+                  <button onClick={handleToggleInviteChannelModal}>
+                    채널에 초대 하기
                   </button>
                   <button onClick={handleToggleChannelCreationModal}>
                     채널 만들기
@@ -202,6 +213,12 @@ export default function Workspace({ children }) {
         <InviteWorkspaceModal
           handleToggleInviteWorkspaceModal={handleToggleInviteWorkspaceModal}
           setShowInviteWorkspaceModal={setShowInviteWorkspaceModal}
+        />
+      )}
+      {showInviteChannelModal && (
+        <InviteChannelModal
+          handleToggleInviteChannelModal={handleToggleInviteChannelModal}
+          setShowInviteChannelModal={setShowInviteChannelModal}
         />
       )}
     </>
