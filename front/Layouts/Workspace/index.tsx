@@ -23,7 +23,8 @@ export default function Workspace({ children }) {
 
   const [logoutError, setLogoutError] = useState<string>("");
   const [showProfile, setShowProfile] = useState<boolean>(false);
-  const [showWorkspaceModal, setShowWorkspaceModal] = useState<boolean>(false);
+  const [showWorkspaceCreationModal, setShowWorkspaceCreationModal] =
+    useState<boolean>(false);
 
   useEffect(() => {
     if (!data) {
@@ -50,9 +51,9 @@ export default function Workspace({ children }) {
     setShowProfile((prev) => !prev);
   }, []);
 
-  const handleToggleWorkspaceModal = useCallback((e) => {
+  const handleToggleWorkspaceCreationModal = useCallback((e) => {
     e.stopPropagation();
-    setShowWorkspaceModal((prev) => !prev);
+    setShowWorkspaceCreationModal((prev) => !prev);
   }, []);
 
   return (
@@ -112,7 +113,7 @@ export default function Workspace({ children }) {
           <button
             type="button"
             className={styles.addButton}
-            onClick={handleToggleWorkspaceModal}
+            onClick={handleToggleWorkspaceCreationModal}
           >
             +
           </button>
@@ -125,10 +126,10 @@ export default function Workspace({ children }) {
         <div className={styles.chats}>{children}</div>
       </div>
       <ToastContainer />
-      {showWorkspaceModal && (
+      {showWorkspaceCreationModal && (
         <NewWorkSpaceCreationModal
-          handleToggleWorkspaceModal={handleToggleWorkspaceModal}
-          setShowWorkspaceModal={setShowWorkspaceModal}
+          handleToggleWorkspaceModal={handleToggleWorkspaceCreationModal}
+          setShowWorkspaceModal={setShowWorkspaceCreationModal}
           setShowProfile={setShowProfile}
         />
       )}
