@@ -1,12 +1,13 @@
+import styles from "./workspace.module.scss";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import Router from "next/router";
 import Image from "next/image";
 import useSWR, { mutate } from "swr";
-import fetcher from "../utils/fetcher";
+import fetcher from "../../utils/fetcher";
 import gravatar from "gravatar";
 
-function Workspace({ children }) {
+export default function Workspace({ children }) {
   const { data } = useSWR("http://localhost:3095/api/users", fetcher);
   const [logoutError, setLogoutError] = useState("");
 
@@ -32,9 +33,10 @@ function Workspace({ children }) {
 
   return (
     <>
-      <header>
-        <div>
+      <header className={styles.header}>
+        <div className={styles.rightMenu}>
           <Image
+            className="img"
             src={gravatar.url(data?.email, {
               protocol: "http",
               s: "28",
@@ -46,10 +48,17 @@ function Workspace({ children }) {
           ></Image>
         </div>
       </header>
-      <button onClick={logout}>로그아웃</button>
-      {children}
+      <button onClick={logout} className={styles.logOutButton}>
+        로그아웃
+      </button>
+      <div className={styles.workspaceWrapper}>
+        <div className={styles.workspaces}></div>
+        <nav className={styles.channels}>
+          <button className={styles.workspaceName}>Sleact</button>
+          <div className={styles.menuScroll}>menuScroll</div>
+        </nav>
+        <div className={styles.chats}>{children}</div>
+      </div>
     </>
   );
 }
-
-export default Workspace;
