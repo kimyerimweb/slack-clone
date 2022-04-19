@@ -3,7 +3,7 @@ import styles from "./menu.module.scss";
 
 type MenuProp = {
   children: ReactChild;
-  handleCloseModal: () => void;
+  handleCloseModal: (e: any) => void;
 };
 
 export default function Menu({ children, handleCloseModal }: MenuProp) {

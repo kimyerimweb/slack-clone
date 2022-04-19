@@ -55,7 +55,8 @@ export default function Workspace({ children }) {
       });
   }, []);
 
-  const handleToggleProfile = useCallback(() => {
+  const handleToggleProfile = useCallback((e) => {
+    e.stopPropagation();
     setShowProfile((prev) => !prev);
   }, []);
 
