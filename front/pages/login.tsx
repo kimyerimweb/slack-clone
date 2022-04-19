@@ -1,3 +1,4 @@
+import styles from "../styles/auth.module.scss";
 import { useForm } from "react-hook-form";
 import Router from "next/router";
 import Link from "next/link";
@@ -53,13 +54,11 @@ export default function Login() {
 
   return (
     <>
-      <header>
-        <h1 aria-label="logo">logo</h1>
-        Sleact
-      </header>
+      <header className={styles.header}>Sleact</header>
       <main>
-        <form onSubmit={handleSubmit(handleSubmitForm)}>
+        <form onSubmit={handleSubmit(handleSubmitForm)} className={styles.form}>
           <input
+            className={styles.input}
             {...register("email", {
               required: "필수 응답 항목입니다.",
               pattern: {
@@ -69,8 +68,9 @@ export default function Login() {
             })}
             placeholder="name@work-email.com"
           />
-          <p>{errors.email && errors.email.message}</p>
+          <p className={styles.error}>{errors.email && errors.email.message}</p>
           <input
+            className={styles.input}
             {...register("password", {
               required: true,
               minLength: {
@@ -81,11 +81,15 @@ export default function Login() {
             type="password"
             placeholder="password (8자 이상)"
           />
-          <p>{errors.password && errors.password.message}</p>
-          <button type="submit">로그인</button>
-          {isLoginError && <p>{isLoginError}</p>}
+          <p className={styles.error}>
+            {errors.password && errors.password.message}
+          </p>
+          <button type="submit" className={styles.button}>
+            로그인
+          </button>
+          {isLoginError && <p className={styles.error}>{isLoginError}</p>}
         </form>
-        <p>
+        <p className={styles.linkContainer}>
           회원이 아니신가요?
           <Link href="/signup">회원가입 하러가기</Link>
         </p>

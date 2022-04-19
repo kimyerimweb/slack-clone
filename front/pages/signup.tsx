@@ -1,3 +1,4 @@
+import styles from "../styles/auth.module.scss";
 import { useForm } from "react-hook-form";
 import Router from "next/router";
 import Link from "next/link";
@@ -81,13 +82,11 @@ export default function Signup() {
 
   return (
     <>
-      <header>
-        <h1 aria-label="logo">logo</h1>
-        Sleact
-      </header>
+      <header className={styles.header}>Sleact</header>
       <main>
-        <form onSubmit={handleSubmit(handleSubmitForm)}>
+        <form onSubmit={handleSubmit(handleSubmitForm)} className={styles.form}>
           <input
+            className={styles.input}
             {...register("email", {
               required: "필수 응답 항목입니다.",
               pattern: {
@@ -97,8 +96,9 @@ export default function Signup() {
             })}
             placeholder="name@work-email.com"
           />
-          <p>{errors.email && errors.email.message}</p>
+          <p className={styles.error}>{errors.email && errors.email.message}</p>
           <input
+            className={styles.input}
             {...register("nickname", {
               required: "필수 응답 항목입니다.",
               minLength: {
@@ -110,11 +110,16 @@ export default function Signup() {
             type="text"
             placeholder="nickname (2자 이상)"
           />
-          <p>{errors.nickname && errors.nickname.message}</p>
+          <p className={styles.error}>
+            {errors.nickname && errors.nickname.message}
+          </p>
           {errors.nickname && errors.nickname.type === "validate" && (
-            <p>유효하지 않은 닉네임입니다. (공백으로 이루어져 있습니다.)</p>
+            <p className={styles.error}>
+              유효하지 않은 닉네임입니다. (공백으로 이루어져 있습니다.)
+            </p>
           )}
           <input
+            className={styles.input}
             {...register("password", {
               required: true,
               minLength: {
@@ -125,8 +130,11 @@ export default function Signup() {
             type="password"
             placeholder="password (8자 이상)"
           />
-          <p>{errors.password && errors.password.message}</p>
+          <p className={styles.error}>
+            {errors.password && errors.password.message}
+          </p>
           <input
+            className={styles.input}
             {...register("passwordCheck", {
               required: true,
               minLength: {
@@ -138,17 +146,23 @@ export default function Signup() {
             type="password"
             placeholder="password Check"
           />
-          <p>{errors.passwordCheck && errors.passwordCheck.message}</p>
+          <p className={styles.error}>
+            {errors.passwordCheck && errors.passwordCheck.message}
+          </p>
           {errors.passwordCheck && errors.passwordCheck.type === "validate" && (
-            <p>비밀번호가 일치하지 않습니다</p>
+            <p className={styles.error}>비밀번호가 일치하지 않습니다</p>
           )}
-          <button type="submit">회원가입</button>
+          <button className={styles.button} type="submit">
+            회원가입
+          </button>
           {isSignUpError && <p>{isSignUpError}</p>}
           {isSignUpSuccess && (
-            <p>회원가입에 성공했습니다! 로그인을 해주세요!</p>
+            <p className={styles.success}>
+              회원가입에 성공했습니다! 로그인을 해주세요!
+            </p>
           )}
         </form>
-        <p>
+        <p className={styles.linkContainer}>
           이미 회원이신가요?
           <Link href="/login">로그인 하러가기</Link>
         </p>
