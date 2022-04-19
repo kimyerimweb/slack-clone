@@ -1,13 +1,12 @@
-import { CSSProperties, FC, ReactChild, useCallback } from "react";
+import { ReactChild, useCallback } from "react";
 import styles from "./menu.module.scss";
 
 type MenuProp = {
-  children: string | FC | ReactChild;
-  show?: boolean;
+  children: ReactChild;
   handleCloseModal: () => void;
 };
 
-export default function Menu({ children, show, handleCloseModal }: MenuProp) {
+export default function Menu({ children, handleCloseModal }: MenuProp) {
   const stopPropagation = useCallback((e) => {
     e.stopPropagation();
   }, []);
