@@ -28,7 +28,7 @@ export default function DMList({ workspace }) {
         >
           <i className={collapse ? styles.open : null}>▲</i>
         </button>
-        <span>Members</span>
+        <span>Direct Messages</span>
       </h2>
       {collapse &&
         memberData?.map((member) => (
