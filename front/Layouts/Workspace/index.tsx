@@ -13,20 +13,18 @@ import "react-toastify/dist/ReactToastify.css";
 
 import Menu from "../../components/Menu";
 import NewWorkSpaceCreationModal from "../../components/NewWorkSpaceCreationModal";
-import { IUser, IChannel } from "../../typings/db";
+import { IUser } from "../../typings/db";
 import NewChannelCreationModal from "../../components/NewChannelCreationModal";
 import InviteWorkspaceModal from "../../components/InviteWorkspaceModal";
 import InviteChannelModal from "../../components/InviteChannelModal";
+import ChannelList from "../../components/ChannelList";
+import DMList from "../../components/DMList";
 
 export default function Workspace({ children }) {
   const router = useRouter();
   const { workspace } = router.query;
 
   const { data } = useSWR<IUser>("http://localhost:3095/api/users", fetcher);
-  const { data: channelData } = useSWR<IChannel[]>(
-    `http://localhost:3095/api/workspaces/${workspace}/channels`,
-    fetcher
-  );
 
   const [logoutError, setLogoutError] = useState<string>("");
   const [showProfile, setShowProfile] = useState<boolean>(false);
@@ -187,9 +185,8 @@ export default function Workspace({ children }) {
                 </div>
               </Menu>
             )}
-            {channelData?.map((ch) => (
-              <div key={ch.id}>{ch.name}</div>
-            ))}
+            <ChannelList workspace={workspace} />
+            <DMList workspace={workspace} />
           </div>
         </nav>
         <div className={styles.chats}>{children}</div>
