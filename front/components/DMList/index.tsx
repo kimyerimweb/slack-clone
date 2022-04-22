@@ -4,6 +4,7 @@ import useSWR from "swr";
 
 import styles from "../../styles/collapse.module.scss";
 import fetcher from "../../utils/fetcher";
+import EachDM from "../EachDM";
 
 export default function DMList({ workspace }) {
   const [collapse, setCollapse] = useState(false);
@@ -12,7 +13,6 @@ export default function DMList({ workspace }) {
     `http://localhost:3095/api/workspaces/${workspace}/members`,
     fetcher
   );
-  const { data } = useSWR<IUser>("http://localhost:3095/api/users", fetcher);
 
   const handleToggleCollapse = useCallback(() => {
     setCollapse((prev) => !prev);
@@ -32,9 +32,7 @@ export default function DMList({ workspace }) {
       </h2>
       {collapse &&
         memberData?.map((member) => (
-          <div key={member.id}>
-            {data.id === member.id ? member.nickname + "(나)" : member.nickname}
-          </div>
+          <EachDM key={member.id} memberData={member} />
         ))}
     </>
   );
