@@ -1,0 +1,37 @@
+.container,
+.focusContainer {
+  display: flex;
+  align-items: center;
+  padding: 5px 0 5px 20px;
+  cursor: pointer;
+}
+
+.focusContainer {
+  background-color: #3b518e;
+  color: #fff;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.count {
+  padding: 3px;
+  border-radius: 1px;
+  background-color: #8e3b40;
+  color: #fff;
+}
+
+.on,
+.off {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1px solid #e2d8dd;
+  background-color: transparent;
+  margin-right: 5px;
+}
+
+.on {
+  background-color: #e2d8dd;
+}

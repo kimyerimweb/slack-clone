@@ -4,6 +4,7 @@ import useSWR from "swr";
 import styles from "../../styles/collapse.module.scss";
 import { IChannel } from "../../typings/db";
 import fetcher from "../../utils/fetcher";
+import EachChannel from "../EachChannel";
 
 export default function ChannelList({ workspace }) {
   const [collapse, setCollapse] = useState(false);
@@ -29,7 +30,8 @@ export default function ChannelList({ workspace }) {
         </button>
         <span>Channels</span>
       </h2>
-      {collapse && channelData?.map((ch) => <div key={ch.id}>{ch.name}</div>)}
+      {collapse &&
+        channelData?.map((ch) => <EachChannel key={ch.id} channelData={ch} />)}
     </>
   );
 }
